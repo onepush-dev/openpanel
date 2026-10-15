@@ -64,7 +64,7 @@ sh -c 'printf "%s\n" "$CADDYFILE" > /etc/caddy/Caddyfile && exec caddy run --con
 | Service | Key vars |
 |---|---|
 | op-postgres | `POSTGRES_USER=postgres`, `POSTGRES_DB=railway`, `POSTGRES_PASSWORD=${{secret(...)}}`, `DATABASE_URL=postgresql://…@${{RAILWAY_PRIVATE_DOMAIN}}:5432/…`, `PGDATA=/var/lib/postgresql/data/pgdata` |
-| op-redis | `REDIS_PASSWORD=${{secret(...)}}`, `REDIS_URL=redis://default:${{REDIS_PASSWORD}}@${{RAILWAY_PRIVATE_DOMAIN}}:${{PORT}}`, `PORT=6379` |
+| op-redis | `REDIS_PASSWORD=${{secret(...)}}`, `REDIS_URL=redis://${{REDISUSER}}:${{REDIS_PASSWORD}}@${{REDISHOST}}:${{REDISPORT}}` (template export); app services use `redis://:${{op-redis.REDIS_PASSWORD}}@${{op-redis.RAILWAY_PRIVATE_DOMAIN}}:6379`, `PORT=6379`; start must `--bind '* -::*'` |
 | op-clickhouse | `CLICKHOUSE_USER=clickhouse`, `CLICKHOUSE_DB=openpanel`, `CLICKHOUSE_PASSWORD=${{secret(...)}}`, `PORT=8123`, `DATABASE_URL=http://…@host:8123/openpanel` |
 
 ## After deploy
@@ -77,3 +77,8 @@ sh -c 'printf "%s\n" "$CADDYFILE" > /etc/caddy/Caddyfile && exec caddy run --con
 - Generate the marketplace template from the live Railway project in the dashboard (**Do not publish from this README alone**).
 - Run **one replica** of Redis/ClickHouse/Postgres volumes.
 - Upstream: https://github.com/Openpanel-dev/openpanel · Docs: https://openpanel.dev/docs/self-hosting/deploy-docker-compose · https://openpanel.dev/docs/self-hosting/environment-variables
+
+## Railway generation notes
+- Image-direct services: after changing **start command**, re-attach the image source (or fresh deploy) so the command actually applies — plain redeploy may keep the old command for some images (observed with Caddy).
+- Public domain on **op-proxy** only, **target port 8080** (matches `PORT=8080`).
+- Verified 2026-10-15 IST: `GET /` → 200 (dashboard); `GET /api/healthcheck` → `{"ready":true,"redis":true,"db":true,"ch":true}`.
