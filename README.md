@@ -1,7 +1,6 @@
 # OpenPanel — open-source Mixpanel/Plausible-style analytics (2.3.0). Deploy on Railway with one click.
 
-<!-- Deploy button: replace DEPLOY_CODE once the Railway template is generated -->
-[![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/deploy/DEPLOY_CODE)
+[![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/deploy/5_YMH6)
 
 [OpenPanel](https://openpanel.dev) is an open-source web and product analytics platform (funnels, retention, events) that combines Mixpanel-style product analytics with Plausible-style simplicity. This template ships **digest-pinned 2.3.0** app images, `API_HOST=::` for Railway IPv6 private networking, a single public Caddy domain for cookies, and **zero deploy-time inputs**.
 
@@ -74,6 +73,7 @@ sh -c 'printf "%s\n" "$CADDYFILE" > /etc/caddy/Caddyfile && exec caddy run --con
 4. Health: `GET https://<domain>/api/healthcheck` (via proxy → API) and the dashboard UI on `/`.
 
 ## Notes
+- Template editor (unpublished): https://railway.com/workspace/templates/79d4d014-818c-44f8-a507-079bc83940f1
 - Generate the marketplace template from the live Railway project in the dashboard (**Do not publish from this README alone**).
 - Run **one replica** of Redis/ClickHouse/Postgres volumes.
 - Upstream: https://github.com/Openpanel-dev/openpanel · Docs: https://openpanel.dev/docs/self-hosting/deploy-docker-compose · https://openpanel.dev/docs/self-hosting/environment-variables
