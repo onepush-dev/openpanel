@@ -1,0 +1,21 @@
+:{$PORT} {
+	handle_path /api/* {
+		@server_request {
+			header openpanel-client-id *
+			header openpanel-client-secret *
+			header x-client-ip *
+		}
+		handle @server_request {
+			reverse_proxy {$API_URL} {
+				header_up openpanel-client-ip {http.request.header.x-client-ip}
+			}
+		}
+		handle {
+			reverse_proxy {$API_URL} {
+				header_up openpanel-client-ip {http.request.header.X-Real-Ip}
+				header_up x-client-ip {http.request.header.X-Real-Ip}
+			}
+		}
+	}
+	reverse_proxy /* {$DASHBOARD_URL}
+}

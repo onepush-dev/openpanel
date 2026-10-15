@@ -1,0 +1,3 @@
+#!/bin/sh
+set -e
+exec redis-server --requirepass "${REDIS_PASSWORD}" --port "${PORT:-6379}" --dir /data --appendonly yes --maxmemory-policy noeviction
